@@ -12,17 +12,32 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class RandomFile {
+
+	private static RandomFile instance; // Singleton instance
 	private RandomAccessFile output;
 	private RandomAccessFile input;
 
+	// Private constructor for Singleton pattern
+    private RandomFile() {}
+
+    // Public method to get the Singleton instance
+    public static RandomFile getInstance() {
+        if (instance == null) {
+            instance = new RandomFile();
+			System.out.println(" New RandomFile instance created.");
+        } else {
+			System.out.println(" RandomFile instance already exists.");
+		}
+        return instance;
+    }
+
 	// Create new file
 	public void createFile(String fileName) {
-		RandomAccessFile file = null;
 
-		try // open file for reading and writing
+		try //open file for reading and writing
 		{
-			file = new RandomAccessFile(fileName, "rw");
-
+			this.output = new RandomAccessFile(fileName, "rw");
+			System.out.println(" File created: " + fileName);
 		} // end try
 		catch (IOException ioException) {
 			JOptionPane.showMessageDialog(null, "Error processing file!");
@@ -31,8 +46,8 @@ public class RandomFile {
 
 		finally {
 			try {
-				if (file != null)
-					file.close(); // close file
+				if (this.output != null)
+					this.output.close(); // close file
 			} // end try
 			catch (IOException ioException) {
 				JOptionPane.showMessageDialog(null, "Error closing file!");
