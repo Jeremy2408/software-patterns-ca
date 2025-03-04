@@ -529,20 +529,24 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		return nextFreeId;
 	}// end getNextFreeId
 
-	// get values from text fields and create Employee object
 	private Employee getChangedDetails() {
 		boolean fullTime = false;
-		Employee theEmployee;
+	
 		if (((String) fullTimeCombo.getSelectedItem()).equalsIgnoreCase("Yes"))
 			fullTime = true;
-
-		theEmployee = new Employee(Integer.parseInt(idField.getText()), ppsField.getText().toUpperCase(),
-				surnameField.getText().toUpperCase(), firstNameField.getText().toUpperCase(),
-				genderCombo.getSelectedItem().toString().charAt(0), departmentCombo.getSelectedItem().toString(),
-				Double.parseDouble(salaryField.getText()), fullTime);
-
-		return theEmployee;
-	}// end getChangedDetails
+	
+		// create new Employee record using EmployeeFactory
+		return EmployeeFactory.createEmployee(
+			Integer.parseInt(idField.getText()),
+			ppsField.getText(),
+			surnameField.getText(),
+			firstNameField.getText(),
+			genderCombo.getSelectedItem().toString().charAt(0),
+			departmentCombo.getSelectedItem().toString(),
+			Double.parseDouble(salaryField.getText()),
+			fullTime
+		);
+	}
 
 	// add Employee object to fail
 	public void addRecord(Employee newEmployee) {
