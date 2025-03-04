@@ -28,10 +28,9 @@ import net.miginfocom.swing.MigLayout;
 
 public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 	// vector with all Employees details
-	Vector<Object> allEmployees;
-	JButton back;
+	Vector<Vector<Object>> allEmployees;	JButton back;
 	
-	public EmployeeSummaryDialog(Vector<Object> allEmployees) {
+	public EmployeeSummaryDialog(Vector<Vector<Object>> allEmployees) {
 		setTitle("Employee Summary");
 		setModal(true);
 		this.allEmployees = allEmployees;

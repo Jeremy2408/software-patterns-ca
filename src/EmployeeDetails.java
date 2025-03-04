@@ -576,9 +576,8 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	}// end deleteDecord
 
 	// create vector of vectors with all Employee details
-	private Vector<Object> getAllEmloyees() {
-		// vector of Employee objects
-		Vector<Object> allEmployee = new Vector<Object>();
+	private Vector<Vector<Object>> getAllEmloyees() {		// vector of Employee objects
+		Vector<Vector<Object>> allEmployee = new Vector<>();
 		Vector<Object> empDetails;// vector of each employee details
 		long byteStart = currentByteStart;
 		int firstId;
