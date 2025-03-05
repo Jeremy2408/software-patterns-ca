@@ -104,6 +104,22 @@ public class Employee{
 	public void setFullTime(boolean fullTime) {
 		this.fullTime = fullTime;
 	}
+	 // Save the current state in a Memento
+	 public EmployeeMemento saveToMemento() {
+        return new EmployeeMemento(employeeId, pps, surname, firstName, gender, department, salary, fullTime);
+    }
+
+    // Restore the previous state from a Memento
+    public void restoreFromMemento(EmployeeMemento memento) {
+        this.employeeId = memento.getEmployeeId();
+        this.pps = memento.getPps();
+        this.surname = memento.getSurname();
+        this.firstName = memento.getFirstName();
+        this.gender = memento.getGender();
+        this.department = memento.getDepartment();
+        this.salary = memento.getSalary();
+        this.fullTime = memento.isFullTime();
+    }
 
 	// Display Employee details
 	public String toString() {

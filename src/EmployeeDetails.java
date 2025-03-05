@@ -50,6 +50,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import net.miginfocom.swing.MigLayout;
 
 public class EmployeeDetails extends JFrame implements ActionListener, ItemListener, DocumentListener, WindowListener {
+	
+	private EmployeeCaretaker caretaker = new EmployeeCaretaker();
+
 	// decimal format for inactive currency text field
 	private static final DecimalFormat format = new DecimalFormat("\u20ac ###,###,##0.00");
 	// decimal format for active currency text field
@@ -68,7 +71,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	private JMenuItem open, save, saveAs, create, modify, delete, firstItem, lastItem, nextItem, prevItem, searchById,
 			searchBySurname, listAll, closeApp;
 	private JButton first, previous, next, last, add, edit, deleteButton, displayAll, searchId, searchSurname,
-			saveChange, cancelChange;
+			saveChange, cancelChange,undoButton;
 	private JComboBox<String> genderCombo, departmentCombo, fullTimeCombo;
 	private JTextField idField, ppsField, surnameField, firstNameField, salaryField;
 	private static EmployeeDetails frame = new EmployeeDetails();
@@ -216,6 +219,9 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		buttonPanel.add(displayAll = new JButton("List all Records"), "growx, pushx");
 		displayAll.addActionListener(this);
 		displayAll.setToolTipText("List all Registered Employees");
+		buttonPanel.add(undoButton = new JButton("Undo"), "growx, pushx");
+		undoButton.addActionListener(this);
+
 
 		return buttonPanel;
 	}
@@ -612,6 +618,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	private void editDetails() {
 		// activate field for editing if there is records to display
 		if (isSomeoneToDisplay()) {
+			caretaker.saveState(currentEmployee.saveToMemento()); // Save state
 			// remove euro sign from salary text field
 			salaryField.setText(fieldFormat.format(currentEmployee.getSalary()));
 			change = false;
@@ -624,6 +631,18 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		setEnabled(false);
 		displayRecords(currentEmployee);
 	}// end cancelChange
+
+	public void undoLastChange() {
+		EmployeeMemento lastState = caretaker.undo();
+		if (lastState != null) {
+			currentEmployee.restoreFromMemento(lastState);
+			displayRecords(currentEmployee); //  Refresh UI with restored state
+			System.out.println(" Undo successful!");
+		} else {
+			System.out.println(" No changes to undo.");
+		}
+	}
+	
 
 	// check if any of records in file is active - ID is not 0
 	private boolean isSomeoneToDisplay() {
@@ -1049,7 +1068,10 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		} else if (e.getSource() == searchBySurname) {
 			if (checkInput() && !checkForChanges())
 				new SearchBySurnameDialog(EmployeeDetails.this);
-		}
+			} else if (e.getSource() == undoButton) {
+				undoLastChange();
+			}
+		
 	}// end actionPerformed
 
 	// content pane for main dialog
